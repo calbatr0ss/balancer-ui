@@ -10,12 +10,31 @@ const balancerApiUrl = process.env.BALANCER_API_URL
 const app = express()
 
 app.get("/records", async (req, res) => {
+	let response
 	try {
-		const response = await axios.get(`${balancerApiUrl}/records`)
-		res.send()
-	} catch (error) {}
+		response = await axios.get(`${balancerApiUrl}/records`)
+		res.json(response.data)
+		return
+	} catch (error) {
+		console.error(error)
+		res.sendStatus(response.statusCode || 500)
+		return
+	}
 })
-app.post("/records", (req, res) => {})
+
+app.post("/records", async (req, res) => {
+	let response
+	try {
+		response = await axios.post(`${balancerApiUrl}/records`, req.body)
+		res.json(response.data)
+		return
+	} catch (error) {
+		console.error(error)
+		res.sendStatus(response.statusCode || 500)
+		return
+	}
+})
+
 app.put("/records/:id", (req, res) => {})
 app.delete("/records/:id", (req, res) => {})
 app.get("/records/sum", (req, res) => {})
