@@ -29,53 +29,68 @@ const AddRecordDialog = ({ open, handleClose }) => {
 		handleClose()
 	}
 
+	const resetState = () => {
+		setType("Asset")
+		setName("")
+		setBalance(0)
+	}
+
 	return (
-		<Dialog open={open} onClose={handleClose}>
+		<Dialog open={open} onClose={handleClose} onExited={resetState}>
 			<DialogTitle>Create New Record</DialogTitle>
-			<DialogContent>
-				<FormControl component="fieldset">
-					<FormLabel component="legend">Type</FormLabel>
-					<RadioGroup
-						aria-label="type"
-						name="type"
-						value={type}
+			<form
+				onSubmit={(event) => {
+					event.preventDefault()
+					handleSubmit()
+				}}
+			>
+				<DialogContent>
+					<FormControl component="fieldset">
+						<FormLabel component="legend">Type</FormLabel>
+						<RadioGroup
+							aria-label="type"
+							name="type"
+							value={type}
+							onChange={(event) => {
+								setType(event.target.value)
+							}}
+							row
+						>
+							<FormControlLabel value="Asset" control={<Radio />} label="Asset" />
+							<FormControlLabel value="Liability" control={<Radio />} label="Liability" />
+						</RadioGroup>
+					</FormControl>
+					<br />
+					<TextField
+						label="Name"
+						inputProps={{ "data-testid": "name-field" }}
 						onChange={(event) => {
-							setType(event.target.value)
+							setName(event.target.value)
 						}}
-						row
+					/>
+					<br />
+					<TextField
+						label="Balance"
+						inputProps={{ "data-testid": "balance-field" }}
+						type="number"
+						onChange={(event) => {
+							setBalance(event.target.value)
+						}}
+					/>
+				</DialogContent>
+				<DialogActions>
+					<div
+						style={{ display: "flex", justifyContent: "space-between", flexGrow: 1, padding: 8 }}
 					>
-						<FormControlLabel value="Asset" control={<Radio />} label="Asset" />
-						<FormControlLabel value="Liability" control={<Radio />} label="Liability" />
-					</RadioGroup>
-				</FormControl>
-				<br />
-				<TextField
-					label="Name"
-					inputProps={{ "data-testid": "name-field" }}
-					onChange={(event) => {
-						setName(event.target.value)
-					}}
-				/>
-				<br />
-				<TextField
-					label="Balance"
-					inputProps={{ "data-testid": "balance-field" }}
-					type="number"
-					onChange={(event) => {
-						setBalance(event.target.value)
-					}}
-				/>
-			</DialogContent>
-			<DialogActions>
-				<div style={{ display: "flex", justifyContent: "space-between", flexGrow: 1, padding: 8 }}>
-					<Button onClick={handleClose} color="primary">
-						Cancel
-					</Button>
-					<Button onClick={handleSubmit} color="primary" variant="contained">
-						Submit
-					</Button>
-				</div>
-			</DialogActions>
+						<Button onClick={handleClose} color="primary">
+							Cancel
+						</Button>
+						<Button type="submit" color="primary" variant="contained">
+							Submit
+						</Button>
+					</div>
+				</DialogActions>
+			</form>
 		</Dialog>
 	)
 }

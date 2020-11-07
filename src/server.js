@@ -36,13 +36,59 @@ app.post("/records", async (req, res) => {
 	}
 })
 
-app.put("/records/:id", (req, res) => {})
-app.delete("/records/:id", (req, res) => {})
-app.get("/records/sum", (req, res) => {
-	res.json({ sum: 1 }) //todo
+app.put("/records/:id", async (req, res) => {
+	const id = req.params.id
+	let response
+	try {
+		response = await axios.put(`${balancerApiUrl}/records/${id}`, req.body)
+		res.json(response.data)
+		return
+	} catch (error) {
+		console.error(error)
+		res.sendStatus((response && response.statusCode) || 500)
+		return
+	}
 })
-app.get("/records/assets/sum", (req, res) => {})
-app.get("/records/liabilities/sum", (req, res) => {})
+
+app.delete("/records/:id", async (req, res) => {
+	const id = req.params.id
+	let response
+	try {
+		response = await axios.delete(`${balancerApiUrl}/records/${id}`)
+		res.json(response.data)
+		return
+	} catch (error) {
+		console.error(error)
+		res.sendStatus((response && response.statusCode) || 500)
+		return
+	}
+})
+
+app.get("/records/net", async (req, res) => {
+	let response
+	try {
+		response = await axios.get(`${balancerApiUrl}/records/net`)
+		res.json(response.data)
+		return
+	} catch (error) {
+		console.error(error)
+		res.sendStatus((response && response.statusCode) || 500)
+		return
+	}
+})
+
+app.get("/records/sum", async (req, res) => {
+	let response
+	try {
+		response = await axios.get(`${balancerApiUrl}/records/sum`, { params: req.params })
+		res.json(response.data)
+		return
+	} catch (error) {
+		console.error(error)
+		res.sendStatus((response && response.statusCode) || 500)
+		return
+	}
+})
 
 // Serve html
 app.use(express.static(path.join(__dirname, "..", "build")))

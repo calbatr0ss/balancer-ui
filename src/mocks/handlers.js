@@ -9,7 +9,7 @@ export const handlers = [
 	}),
 	// Add a record
 	rest.post("/records", (req, res, ctx) => {
-		const body = JSON.parse(req.body)
+		const body = req.body
 		const recordId = incrementCounter()
 		records[recordId] = {
 			type: body.type,
@@ -32,33 +32,25 @@ export const handlers = [
 		delete records[id]
 		return res(ctx.status(200))
 	}),
-	// TODO: net worth sum
-	rest.get("/records/sum", (req, res, ctx) => {
+	// Calculate net worth
+	rest.get("/records/net", (req, res, ctx) => {
 		let sum = 0
 		for (const key in records) {
 			const record = records[key]
 			sum += record.balance
 		}
-		return res(ctx.status(200), ctx.json({ sum }))
+		return res(ctx.status(200), ctx.json({ value: sum }))
 	}),
-	// TODO: assets sum
-	rest.get("/records/assets/sum", (req, res, ctx) => {
-		let sum = 0
-		const assets = Object.values(records).filter((value) => value.type.toLowerCase() === "asset")
-		for (let record of assets) {
-			sum += record.balance
-		}
-		return res(ctx.status(200), ctx.json({ sum }))
-	}),
-	// TODO: liabilities sum
-	rest.get("/records/liabilities/sum", (req, res, ctx) => {
+	// Calculate a type sum
+	rest.get("/records/sum", (req, res, ctx) => {
+		const type = req.url.searchParams.get("type")
 		let sum = 0
 		const assets = Object.values(records).filter(
-			(value) => value.type.toLowerCase() === "liability"
+			(value) => value.type.toUpperCase() === type.toUpperCase()
 		)
 		for (let record of assets) {
 			sum += record.balance
 		}
-		return res(ctx.status(200), ctx.json({ sum }))
+		return res(ctx.status(200), ctx.json({ value: sum }))
 	}),
 ]

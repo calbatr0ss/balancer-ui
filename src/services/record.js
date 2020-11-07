@@ -19,20 +19,14 @@ export const deleteRecord = async (recordId) => {
 	return response.status
 }
 
-export const getSum = async () => {
-	const response = await fetch("/records/sum")
+export const getNetWorth = async () => {
+	const response = await fetch("/records/net")
 	const data = await response.json()
 	return data
 }
 
-export const getAssetsSum = async () => {
-	const response = await fetch("/records/assets/sum")
-	const data = await response.json()
-	return data
-}
-
-export const getLiabilitiesSum = async () => {
-	const response = await fetch("/records/liabilities/sum")
+export const getTypeSum = async (type) => {
+	const response = await fetch("/records/sum?" + new URLSearchParams({ type }))
 	const data = await response.json()
 	return data
 }
