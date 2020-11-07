@@ -1,10 +1,12 @@
-import RecordTable from "../components/RecordTable"
+import RecordsSummary from "../components/RecordsSummary"
+import RecordsTable from "../components/RecordsTable"
 import AddRecord from "../components/AddRecord"
 
 function App() {
 	return (
 		<>
-			<RecordTable />
+			<RecordsSummary />
+			<RecordsTable />
 			<AddRecord />
 		</>
 	)

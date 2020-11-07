@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { Fab } from "@material-ui/core"
 import { Add as AddIcon } from "@material-ui/icons"
 import AddRecordDialog from "./AddRecordDialog"

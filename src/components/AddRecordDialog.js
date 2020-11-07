@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import { useState, useContext } from "react"
 import {
 	Button,
 	Dialog,
@@ -71,7 +71,7 @@ const AddRecordDialog = ({ open, handleClose }) => {
 					<br />
 					<TextField
 						label="Balance"
-						inputProps={{ "data-testid": "balance-field" }}
+						inputProps={{ step:"any","data-testid": "balance-field" }}
 						type="number"
 						onChange={(event) => {
 							setBalance(event.target.value)
