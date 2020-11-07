@@ -14,7 +14,7 @@ export const handlers = [
 		records[recordId] = {
 			type: body.type,
 			name: body.name,
-			balance: parseFloat(body.balance),
+			balance: body.balance,
 		}
 		return res(ctx.status(201), ctx.json({ recordId }))
 	}),

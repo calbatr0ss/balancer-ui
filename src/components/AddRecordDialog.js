@@ -23,7 +23,7 @@ const AddRecordDialog = ({ open, handleClose }) => {
 	const [balance, setBalance] = useState(0)
 
 	const handleSubmit = async () => {
-		const record = { type, name, balance }
+		const record = { type, name, balance: parseFloat(balance) }
 		const recordId = await createRecord(record)
 		recordDispatch(addRecord({ ...record, id: recordId }))
 		handleClose()
