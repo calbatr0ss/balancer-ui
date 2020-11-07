@@ -8,6 +8,7 @@ const port = process.env.PORT || 3001
 const balancerApiUrl = process.env.BALANCER_API_URL
 
 const app = express()
+app.use(express.json())
 
 app.get("/records", async (req, res) => {
 	let response
@@ -17,7 +18,7 @@ app.get("/records", async (req, res) => {
 		return
 	} catch (error) {
 		console.error(error)
-		res.sendStatus(response.statusCode || 500)
+		res.sendStatus((response && response.statusCode) || 500)
 		return
 	}
 })
@@ -30,7 +31,7 @@ app.post("/records", async (req, res) => {
 		return
 	} catch (error) {
 		console.error(error)
-		res.sendStatus(response.statusCode || 500)
+		res.sendStatus((response && response.statusCode) || 500)
 		return
 	}
 })

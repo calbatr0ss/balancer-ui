@@ -5,7 +5,11 @@ export const getRecords = async () => {
 }
 
 export const createRecord = async (payload) => {
-	const response = await fetch("/records", { method: "POST", body: JSON.stringify(payload) })
+	const response = await fetch("/records", {
+		method: "POST",
+		body: JSON.stringify(payload),
+		headers: { "Content-Type": "application/json" },
+	})
 	const { recordId } = await response.json()
 	return recordId
 }

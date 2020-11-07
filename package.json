@@ -19,7 +19,7 @@
 	"scripts": {
 		"dev": "react-scripts start",
 		"start": "node src/server.js",
-		"start:all": "concurrently --kill-others-on-fail \"npm run start:server\" \"react-scripts start\"",
+		"start:all": "concurrently --kill-others-on-fail \"npm run start\" \"react-scripts start\"",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject"
