@@ -37,7 +37,9 @@ app.post("/records", async (req, res) => {
 
 app.put("/records/:id", (req, res) => {})
 app.delete("/records/:id", (req, res) => {})
-app.get("/records/sum", (req, res) => {})
+app.get("/records/sum", (req, res) => {
+	res.json({ sum: 1 }) //todo
+})
 app.get("/records/assets/sum", (req, res) => {})
 app.get("/records/liabilities/sum", (req, res) => {})
 
