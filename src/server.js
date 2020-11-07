@@ -80,7 +80,7 @@ app.get("/records/net", async (req, res) => {
 app.get("/records/sum", async (req, res) => {
 	let response
 	try {
-		response = await axios.get(`${balancerApiUrl}/records/sum`, { params: req.params })
+		response = await axios.get(`${balancerApiUrl}/records/sum`, { params: req.query })
 		res.json(response.data)
 		return
 	} catch (error) {
