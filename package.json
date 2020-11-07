@@ -5,6 +5,7 @@
 	"dependencies": {
 		"@material-ui/core": "^4.11.0",
 		"@material-ui/icons": "^4.9.1",
+		"@material-ui/lab": "^4.0.0-alpha.56",
 		"@testing-library/jest-dom": "^5.11.5",
 		"axios": "^0.21.0",
 		"cors": "^2.8.5",
@@ -17,7 +18,7 @@
 		"web-vitals": "^0.2.4"
 	},
 	"scripts": {
-		"dev": "react-scripts start",
+		"develop": "react-scripts start",
 		"start": "node src/server.js",
 		"start:all": "concurrently --kill-others-on-fail \"npm run start\" \"react-scripts start\"",
 		"build": "react-scripts build",
