@@ -125,7 +125,7 @@ const RecordsTable = () => {
 												<TableCell
 													align="right"
 													data-testid={`table-row-${row.id}-balance`}
-													style={{ color: row.type.toLowerCase() === "asset" ? "green" : "red" }}
+													style={{ color: row.type.toUpperCase() === "ASSET" ? "green" : "red" }}
 												>
 													{formatAsCurrency(row.balance)}
 												</TableCell>

@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core"
 
 const RecordDialogForm = ({ open, handleClose, handleSubmit, form = {} }) => {
-	const [type, setType] = useState(form.type || "Asset")
+	const [type, setType] = useState(form.type || "ASSET")
 	const [name, setName] = useState(form.name || "")
 	const [balance, setBalance] = useState(form.balance || 0)
 
@@ -25,7 +25,7 @@ const RecordDialogForm = ({ open, handleClose, handleSubmit, form = {} }) => {
 	}, [form])
 
 	const resetState = () => {
-		setType("Asset")
+		setType("ASSET")
 		setName("")
 		setBalance(0)
 	}
@@ -36,7 +36,14 @@ const RecordDialogForm = ({ open, handleClose, handleSubmit, form = {} }) => {
 			<form
 				onSubmit={(event) => {
 					event.preventDefault()
-					handleSubmit({ name, type, balance: parseFloat(balance) })
+					handleSubmit({
+						name,
+						type,
+						balance:
+							type.toUpperCase() === "ASSET"
+								? Math.abs(parseFloat(balance))
+								: -Math.abs(parseFloat(balance)),
+					})
 				}}
 			>
 				<DialogContent>
@@ -51,8 +58,8 @@ const RecordDialogForm = ({ open, handleClose, handleSubmit, form = {} }) => {
 							}}
 							row
 						>
-							<FormControlLabel value="Asset" control={<Radio />} label="Asset" />
-							<FormControlLabel value="Liability" control={<Radio />} label="Liability" />
+							<FormControlLabel value="ASSET" control={<Radio />} label="Asset" />
+							<FormControlLabel value="LIABILITY" control={<Radio />} label="Liability" />
 						</RadioGroup>
 					</FormControl>
 					<br />
@@ -72,7 +79,7 @@ const RecordDialogForm = ({ open, handleClose, handleSubmit, form = {} }) => {
 						placeholder="0.00"
 						defaultValue={form.balance ? Math.abs(balance) : undefined}
 						onChange={(event) => {
-							const value = type === "Asset" ? event.target.value : `-${event.target.value}`
+							const value = type === "ASSET" ? event.target.value : `-${event.target.value}`
 							setBalance(value)
 						}}
 					/>
@@ -84,7 +91,7 @@ const RecordDialogForm = ({ open, handleClose, handleSubmit, form = {} }) => {
 						<Button onClick={handleClose} color="primary">
 							Cancel
 						</Button>
-						<Button type="submit" color="primary" variant="contained" disabled={!name}>
+						<Button type="submit" color="primary" variant="contained" disabled={!name || !type}>
 							Submit
 						</Button>
 					</div>

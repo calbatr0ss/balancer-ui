@@ -223,8 +223,13 @@ test("should edit an entry", async () => {
 	userEvent.click(screen.getByText(/submit/i))
 	await waitFor(() => expect(screen.queryByText(/create new record/i)).not.toBeInTheDocument())
 
-	// Edit the entry
 	userEvent.click(screen.getByTestId("edit-0"))
+	// Expect the form to be prefilled
+	expect(screen.getByRole("radio", { name: "Liability" })).toBeChecked()
+	expect(screen.getByTestId("name-field")).toHaveValue(liabilityName)
+	expect(screen.getByTestId("balance-field")).toHaveValue(parseFloat(liabilityBalance))
+
+	// Edit the entry
 	const updatedName = "Updated Name"
 	const updatedBalance = "23.40"
 	userEvent.click(screen.getByRole("radio", { name: "Asset" }))
@@ -236,7 +241,7 @@ test("should edit an entry", async () => {
 	await waitFor(() => expect(screen.queryByText(/create new record/i)).not.toBeInTheDocument())
 
 	// Ensure the update was successful
-	expect(screen.getByText("Asset")).toBeInTheDocument()
+	expect(screen.getByText("ASSET")).toBeInTheDocument()
 	expect(screen.getByText(updatedName)).toBeInTheDocument()
 	expect(screen.getAllByText("$23.40")).toHaveLength(3)
 })
