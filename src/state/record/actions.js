@@ -7,6 +7,15 @@ export const addRecord = (record) => ({
 	},
 })
 
+export const EDIT_RECORD = "EDIT_RECORD"
+export const editRecord = (record) => ({
+	type: EDIT_RECORD,
+	payload: {
+		recordId: record.id,
+		record: { type: record.type, name: record.name, balance: record.balance },
+	},
+})
+
 export const DELETE_RECORD = "DELETE_RECORD"
 export const deleteRecord = (recordId) => ({
 	type: DELETE_RECORD,

@@ -14,6 +14,15 @@ export const createRecord = async (payload) => {
 	return recordId
 }
 
+export const editRecord = async (recordId, payload) => {
+	const response = await fetch(`/records/${recordId}`, {
+		method: "PUT",
+		body: JSON.stringify(payload),
+		headers: { "Content-Type": "application/json" },
+	})
+	return response.status
+}
+
 export const deleteRecord = async (recordId) => {
 	const response = await fetch(`/records/${recordId}`, { method: "DELETE" })
 	return response.status

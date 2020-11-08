@@ -1,4 +1,4 @@
-import { useState, useContext } from "react"
+import { useState, useEffect } from "react"
 import {
 	Button,
 	Dialog,
@@ -12,22 +12,17 @@ import {
 	RadioGroup,
 	Radio,
 } from "@material-ui/core"
-import { createRecord } from "../services/record"
-import RecordContext from "../state/record/context"
-import { addRecord } from "../state/record/actions"
 
-const AddRecordDialog = ({ open, handleClose }) => {
-	const [, recordDispatch] = useContext(RecordContext)
-	const [type, setType] = useState("Asset")
-	const [name, setName] = useState("")
-	const [balance, setBalance] = useState(0)
+const RecordDialogForm = ({ open, handleClose, handleSubmit, form = {} }) => {
+	const [type, setType] = useState(form.type || "Asset")
+	const [name, setName] = useState(form.name || "")
+	const [balance, setBalance] = useState(form.balance || 0)
 
-	const handleSubmit = async () => {
-		const record = { type, name, balance: parseFloat(balance) }
-		const recordId = await createRecord(record)
-		recordDispatch(addRecord({ ...record, id: recordId }))
-		handleClose()
-	}
+	useEffect(() => {
+		if (form.type) setType(form.type)
+		if (form.name) setName(form.name)
+		if (form.balance) setBalance(form.balance)
+	}, [form])
 
 	const resetState = () => {
 		setType("Asset")
@@ -41,7 +36,7 @@ const AddRecordDialog = ({ open, handleClose }) => {
 			<form
 				onSubmit={(event) => {
 					event.preventDefault()
-					handleSubmit()
+					handleSubmit({ name, type, balance: parseFloat(balance) })
 				}}
 			>
 				<DialogContent>
@@ -64,6 +59,7 @@ const AddRecordDialog = ({ open, handleClose }) => {
 					<TextField
 						label="Name"
 						inputProps={{ "data-testid": "name-field" }}
+						defaultValue={name}
 						onChange={(event) => {
 							setName(event.target.value)
 						}}
@@ -74,6 +70,7 @@ const AddRecordDialog = ({ open, handleClose }) => {
 						inputProps={{ step: "any", min: "0", "data-testid": "balance-field" }}
 						type="number"
 						placeholder="0.00"
+						defaultValue={form.balance ? Math.abs(balance) : undefined}
 						onChange={(event) => {
 							const value = type === "Asset" ? event.target.value : `-${event.target.value}`
 							setBalance(value)
@@ -96,4 +93,4 @@ const AddRecordDialog = ({ open, handleClose }) => {
 		</Dialog>
 	)
 }
-export default AddRecordDialog
+export default RecordDialogForm

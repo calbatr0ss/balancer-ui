@@ -79,7 +79,7 @@ test("should add a liability record", async () => {
 	expect(screen.getByTestId("table-row-0-balance").textContent).toBe(`- $${entryBalance}`)
 })
 
-test("should allow record deletion", async () => {
+test("should delete a record", async () => {
 	render(<RecordsView />)
 
 	// Create new liability
@@ -208,4 +208,35 @@ test("should display liabilities sum", async () => {
 	await waitFor(() => expect(screen.queryByText(/create new record/i)).not.toBeInTheDocument())
 
 	expect(screen.getByText("- $104.00")).toBeInTheDocument()
+})
+
+test("should edit an entry", async () => {
+	render(<RecordsView />)
+
+	// Create new liability
+	userEvent.click(screen.getByTestId("add-record-button"))
+	userEvent.click(screen.getByRole("radio", { name: "Liability" }))
+	let liabilityName = "Test Liability"
+	let liabilityBalance = "100.50"
+	userEvent.type(screen.getByTestId("name-field"), liabilityName)
+	userEvent.type(screen.getByTestId("balance-field"), liabilityBalance)
+	userEvent.click(screen.getByText(/submit/i))
+	await waitFor(() => expect(screen.queryByText(/create new record/i)).not.toBeInTheDocument())
+
+	// Edit the entry
+	userEvent.click(screen.getByTestId("edit-0"))
+	const updatedName = "Updated Name"
+	const updatedBalance = "23.40"
+	userEvent.click(screen.getByRole("radio", { name: "Asset" }))
+	userEvent.clear(screen.getByTestId("name-field"))
+	userEvent.type(screen.getByTestId("name-field"), updatedName)
+	userEvent.clear(screen.getByTestId("balance-field"))
+	userEvent.type(screen.getByTestId("balance-field"), updatedBalance)
+	userEvent.click(screen.getByText(/submit/i))
+	await waitFor(() => expect(screen.queryByText(/create new record/i)).not.toBeInTheDocument())
+
+	// Ensure the update was successful
+	expect(screen.getByText("Asset")).toBeInTheDocument()
+	expect(screen.getByText(updatedName)).toBeInTheDocument()
+	expect(screen.getAllByText("$23.40")).toHaveLength(3)
 })
