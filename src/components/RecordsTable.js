@@ -24,10 +24,13 @@ const RecordsTable = () => {
 	const [recordState, recordDispatch] = useContext(RecordContext)
 
 	useEffect(() => {
+		// Detect if the component has unmounted before setting state
+		let mounted = true
 		const getRows = async () => {
 			setLoading(true)
 			try {
 				const records = await getRecords()
+				if (!mounted) return
 				// Add records to context
 				for (let el of records) {
 					recordDispatch(addRecord(el))
@@ -40,6 +43,10 @@ const RecordsTable = () => {
 		}
 
 		getRows()
+
+		return () => {
+			mounted = false
+		}
 	}, [recordDispatch])
 
 	useEffect(() => {
@@ -91,7 +98,7 @@ const RecordsTable = () => {
 												data-testid={`table-row-${row.id}-balance`}
 												style={{ color: row.type.toLowerCase() === "asset" ? "green" : "red" }}
 											>
-												$ {formatAsCurrency(row.balance)}
+												{formatAsCurrency(row.balance)}
 											</TableCell>
 											<TableCell align="center">
 												{/* <IconButton

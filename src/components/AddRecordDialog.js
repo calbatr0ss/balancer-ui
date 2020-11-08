@@ -71,10 +71,12 @@ const AddRecordDialog = ({ open, handleClose }) => {
 					<br />
 					<TextField
 						label="Balance"
-						inputProps={{ step:"any","data-testid": "balance-field" }}
+						inputProps={{ step: "any", min: "0", "data-testid": "balance-field" }}
 						type="number"
+						placeholder="0.00"
 						onChange={(event) => {
-							setBalance(event.target.value)
+							const value = type === "Asset" ? event.target.value : `-${event.target.value}`
+							setBalance(value)
 						}}
 					/>
 				</DialogContent>
@@ -85,7 +87,7 @@ const AddRecordDialog = ({ open, handleClose }) => {
 						<Button onClick={handleClose} color="primary">
 							Cancel
 						</Button>
-						<Button type="submit" color="primary" variant="contained">
+						<Button type="submit" color="primary" variant="contained" disabled={!name}>
 							Submit
 						</Button>
 					</div>

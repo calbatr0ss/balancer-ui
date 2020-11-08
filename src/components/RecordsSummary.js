@@ -15,14 +15,17 @@ const RecordsSummary = () => {
 	const [totalLiabilitiesLoading, setTotalLiabilitiesLoading] = useState(false)
 
 	useEffect(() => {
+		// Detect if the component has unmounted before setting state
+		let mounted = true
 		const fetchNet = async () => {
 			setNetWorthLoading(true)
 			try {
 				const { value } = await getNetWorth()
+				if (!mounted) return
 				setNetWorth(value)
 			} catch (error) {
 				console.error(error)
-				// TODO
+				setNetWorth(null)
 			}
 			setNetWorthLoading(false)
 		}
@@ -30,10 +33,11 @@ const RecordsSummary = () => {
 			setTotalAssetsLoading(true)
 			try {
 				const { value } = await getTypeSum("asset")
+				if (!mounted) return
 				setTotalAssets(value)
 			} catch (error) {
 				console.error(error)
-				// TODO
+				setTotalAssets(null)
 			}
 			setTotalAssetsLoading(false)
 		}
@@ -41,10 +45,11 @@ const RecordsSummary = () => {
 			setTotalLiabilitiesLoading(true)
 			try {
 				const { value } = await getTypeSum("liability")
+				if (!mounted) return
 				setTotalLiabilities(value)
 			} catch (error) {
 				console.error(error)
-				// TODO
+				setTotalLiabilities(null)
 			}
 			setTotalLiabilitiesLoading(false)
 		}
@@ -52,6 +57,10 @@ const RecordsSummary = () => {
 		fetchNet()
 		fetchTotalAssets()
 		fetchTotalLiabilities()
+
+		return () => {
+			mounted = false
+		}
 	}, [recordState])
 
 	return (
@@ -73,7 +82,11 @@ const RecordsSummary = () => {
 					</p>
 					<span style={{ flexGrow: 1 }} />
 					<div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-						{netWorthLoading ? <CircularProgress size={20} /> : <>$ {formatAsCurrency(netWorth)}</>}
+						{netWorthLoading ? (
+							<CircularProgress size={20} />
+						) : (
+							<>{netWorth !== null ? formatAsCurrency(netWorth) : "Error"}</>
+						)}
 					</div>
 				</div>
 			</Card>
@@ -96,7 +109,7 @@ const RecordsSummary = () => {
 						{totalAssetsLoading ? (
 							<CircularProgress size={20} />
 						) : (
-							<>$ {formatAsCurrency(totalAssets)}</>
+							<>{totalAssets !== null ? formatAsCurrency(totalAssets) : "Error"}</>
 						)}
 					</div>
 				</div>
@@ -119,7 +132,7 @@ const RecordsSummary = () => {
 						{totalLiabilitiesLoading ? (
 							<CircularProgress size={20} />
 						) : (
-							<>$ {formatAsCurrency(totalLiabilities)}</>
+							<>{totalLiabilities !== null ? formatAsCurrency(totalLiabilities) : "Error"}</>
 						)}
 					</div>
 				</div>
